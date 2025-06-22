@@ -1,9 +1,12 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <bits/stdc++.h>
 #include <unistd.h>
 #include <thread>
 #include <cstring>
+
+using namespace std;
 
 void receive_messages(int sock) {
     char buffer[1024];
@@ -38,6 +41,15 @@ int main() {
     }
 
     std::thread receiver(receive_messages, sock);
+    string name="NAME:";
+    
+    std::cout << "Enter your name"<< endl ;
+    string temp;
+    getline(std::cin,temp);
+    name += temp;
+    cout<<name<<endl;
+    send(sock, name.c_str(), name.length(), 0);
+
     std::string msg;
     while (true) {
         std::getline(std::cin, msg);
