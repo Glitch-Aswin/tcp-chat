@@ -14,12 +14,13 @@ void receive_messages(int sock) {
         int bytes_received = recv(sock, buffer, sizeof(buffer), 0);
         if (bytes_received <= 0) break;
         buffer[bytes_received] = '\0';
-        std::cout << "\n[Server]: " << buffer;
+        std::cout << "\n" << buffer;
         std::cout.flush();
     }
 }
 
 int main() {
+
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
         std::cerr << "Socket creation error\n";
@@ -41,6 +42,16 @@ int main() {
     }
 
     std::thread receiver(receive_messages, sock);
+
+    std::string welcomemsg = 
+    "\033[1;36m\n" // Cyan bold
+    "----------WELCOME TO SOCKET_CHAT----------\n"
+    "\033[0m"       // Reset
+    "This is a TCP-based socket chat app. Enter your name and start chatting :)\n"
+    "\033[1;33mUse the command /help for commands\033[0m\n";
+
+    cout<<welcomemsg;
+
     string name="NAME:";
     
     std::cout << "Enter your name"<< endl ;
@@ -53,8 +64,10 @@ int main() {
     std::string msg;
     while (true) {
         std::getline(std::cin, msg);
-        if (msg == "exit") break;
         send(sock, msg.c_str(), msg.length(), 0);
+        if (msg == "exit"){
+            break;
+        }
     }
 
     close(sock);
