@@ -56,7 +56,7 @@ void handle_client(int client_socket) {
 
     while (true) {
         int bytes_read = read(client_socket, buffer, sizeof(buffer));
-        if (bytes_read <= 0) break;
+        if (bytes_read <= 0) continue;
         
 
         std::string message(buffer, bytes_read);
@@ -117,7 +117,6 @@ void handle_client(int client_socket) {
                 std::lock_guard<std::mutex> lock(clients_mutex);
                 tagged = "\033[1;35m[" + clients[client_socket] + "]\033[0m: " + message;
             }
-            std::cout << tagged;
             broadcast(tagged, client_socket);
 
         }
