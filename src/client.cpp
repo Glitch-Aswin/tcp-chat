@@ -63,9 +63,10 @@ int main() {
 
     std::string msg;
     while (true) {
+        std::cout << "\033[1;32m> \033[0m";
         std::getline(std::cin, msg);
         send(sock, msg.c_str(), msg.length(), 0);
-        if (msg == "exit"){
+        if(msg == "/exit") {
             break;
         }
     }

@@ -61,21 +61,27 @@ void handle_client(int client_socket) {
 
         std::string message(buffer, bytes_read);
 
-        if(message=="exit") break;
-
         string command = message.substr(0,5);
         
         if(command == "/mesg"){
             int position = find_msg_position(message);
+            if(position > (static_cast<int> (message.size()))){
+                string error = "[Server]: Insufficient parameters (/mesg NAME MESSAGE) \n";
+                //send invalid name error msg
+                lock_guard<mutex> lock(clients_mutex);//dont forget to lock
+                send(client_socket,error.c_str(), error.size(), 0);
+
+                continue;
+            }
             string name = message.substr(6,(position-7));
             name.erase(name.find_last_not_of(" \t\r\n") + 1);
             name.erase(0, name.find_first_not_of(" \t\r\n"));
 
             if(who_is.find(name)!= who_is.end()){
-                unicast(clients[client_socket]+":"+message.substr(position,(message.size()-position)),who_is[name]);
+                unicast("\033[1;33m" + clients[client_socket] + "\033[0m: " + message.substr(position), who_is[name]);
             }
             else{
-                string error = "[Server]: Invalid name, try /list command to see users\n"+name;
+                string error = "[Server]: Invalid name, try /list command to see users\n";
                 //send invalid name error msg
                 lock_guard<mutex> lock(clients_mutex);//dont forget to lock
                 send(client_socket,error.c_str(), error.size(), 0);
@@ -84,22 +90,32 @@ void handle_client(int client_socket) {
             string list="";
             lock_guard<mutex> lock(clients_mutex);//dont forget to lock
             for(auto client:clients){
+                if(client.first==client_socket) list.append(">");
                 list.append(client.second+"\n");
             }
+            list.append("\n");
             send(client_socket,list.c_str(), list.size(), 0);
         }else if (command == "/help") {
-        string help = 
-            "Available commands:\n"
-            "/list        - List users\n"
-            "/mesg NAME M - Send private msg\n"
-            "/exit        - Leave chat\n"
-            "/help        - This help\n";
+            string help = 
+                "\033[1;36mAvailable commands:\033[0m\n"
+                "\033[1;33m/list         \033[0m - \033[0;37mList all connected users\033[0m\n"
+                "\033[1;32m/mesg NAME MSG\033[0m - \033[0;37mSend a private message to NAME\033[0m\n"
+                "\033[1;31m/exit         \033[0m - \033[0;37mLeave the chatroom\033[0m\n"
+                "\033[1;34m/help         \033[0m - \033[0;37mShow this help message\033[0m\n\n"
+            ;
+
             send(client_socket, help.c_str(), help.size(), 0);
+        }else if (command == "/exit") {
+            string exitmsg = 
+                "\033[1;32m\nThank you for using SocketChat!\033[0m\n"
+                "\033[1;36mWe hope to see you again soon. Goodbye!\033[0m\n";
+            send(client_socket, exitmsg.c_str(), exitmsg.size(), 0);
+            break;
         }else{
             std::string tagged;
             {
                 std::lock_guard<std::mutex> lock(clients_mutex);
-                tagged = "[" + clients[client_socket] + "]: " + message;
+                tagged = "\033[1;35m[" + clients[client_socket] + "]\033[0m: " + message;
             }
             std::cout << tagged;
             broadcast(tagged, client_socket);
@@ -114,6 +130,7 @@ void handle_client(int client_socket) {
         std::lock_guard<std::mutex> lock(clients_mutex);
         name = clients[client_socket];
         clients.erase(client_socket);
+        who_is.erase(name);
     }
 
     std::string leave_msg = name + " left the chat.\n";
