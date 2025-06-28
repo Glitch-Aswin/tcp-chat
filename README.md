@@ -1,4 +1,4 @@
-# 🚀 SocketChat — TCP-Based Multi-Client Chat Server in C++
+# SocketChat: A TCP-Based Multi-Client Chat Server in C++
 
 SocketChat is a multi-client chat application implemented in C++ using POSIX sockets. It allows multiple users to join a shared chatroom, broadcast messages to all users, or send private (unicast) messages to specific users.
 
@@ -66,31 +66,8 @@ When you run the client, you’ll be prompted to enter your name. After that, yo
 
 ## 💬 Example Flow
 
-```plaintext
-----------WELCOME TO SOCKET_CHAT----------
-This is a TCP-based socket chat app. Enter your name and start chatting :)
-Use the command /help for commands
+![image](https://github.com/user-attachments/assets/4a85d6e2-a961-4ac6-b8f7-37679c7cd7b0)
 
-Enter your name
-Aswin
-NAME:Aswin
-
-> hi
-[lolcat]: hi ppl
-
-> /list
-anon
-lolcat
->Aswin
-
-> /mesg anon hey, this is a secret
-anon: ok, got it. lolcat doesn’t need to know 
-
-> /exit
-
-Thank you for using SocketChat!
-We hope to see you again soon. Goodbye!
-```
 
 ---
 
@@ -154,4 +131,3 @@ SocketChat is intended for learning and demonstration purposes. It does not impl
 If you have questions or want to share feedback, feel free to open an issue or reach out via GitHub.
 
 ---
-
