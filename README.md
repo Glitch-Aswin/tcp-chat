@@ -1,4 +1,4 @@
-# SocketChat — TCP-Based Multi-Client Chat Server in C++
+# SocketChat: A TCP-Based Multi-Client Chat Server in C++
 
 SocketChat is a multi-client chat application implemented in C++ using POSIX sockets. It allows multiple users to join a shared chatroom, broadcast messages to all users, or send private (unicast) messages to specific users.
 
