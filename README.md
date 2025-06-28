@@ -19,6 +19,13 @@ Built with thread support and a command-driven interface, SocketChat is designed
 
 ---
 
+## 💬 Example Flow
+
+![image](https://github.com/user-attachments/assets/4a85d6e2-a961-4ac6-b8f7-37679c7cd7b0)
+
+
+---
+
 ## 💻 Build Instructions
 
 Make sure you have `g++` and `make` installed.
@@ -61,13 +68,6 @@ When you run the client, you’ll be prompted to enter your name. After that, yo
 | `/mesg NAME MSG` | Send a private (unicast) message to `NAME`.               |
 | `/help`          | Show available commands.                                  |
 | `/exit`          | Leave the chatroom gracefully.                            |
-
----
-
-## 💬 Example Flow
-
-![image](https://github.com/user-attachments/assets/4a85d6e2-a961-4ac6-b8f7-37679c7cd7b0)
-
 
 ---
 
